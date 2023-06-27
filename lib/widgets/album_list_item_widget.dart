@@ -1,5 +1,6 @@
 import 'package:albums/models/album.dart';
 import 'package:albums/themes/app_colors.dart';
+import 'package:albums/themes/app_font_style.dart';
 import 'package:flutter/material.dart';
 
 class AlbumListItemWidget extends StatelessWidget {
@@ -31,7 +32,10 @@ class AlbumListItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(album.title),
+                    Text(
+                      album.title,
+                      style: AppFontStyle.titleText,
+                    ),
                     Text('Album with id: ${album.id}'),
                   ],
                 ),
