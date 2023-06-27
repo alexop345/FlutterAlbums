@@ -1,4 +1,4 @@
-import 'package:albums/screens/albums_list_screen.dart';
+import 'package:albums/screens/album_list/album_list_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AlbumsListScreen(),
+      home: const AlbumListScreen(),
     );
   }
 }
