@@ -1,5 +1,6 @@
 import 'package:albums/models/album.dart';
 import 'package:albums/screens/album_list/album_list_view_model.dart';
+import 'package:albums/themes/app_diments.dart';
 import 'package:albums/widgets/album_list_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
@@ -35,11 +36,11 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
             final List<Album> albums = snapshot.data ?? [];
             return (albums.isNotEmpty)
                 ? ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: AppDimens.containerDefaultSpacingAll ,
                     itemCount: albums.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
+                        padding: AppDimens.bottomDefaultSpacing,
                         child: AlbumListItemWidget(albums[index]),
                       );
                     },

@@ -1,6 +1,6 @@
 import 'package:albums/models/album.dart';
 import 'package:albums/screens/album_details/album_details_screen.dart';
-import 'package:albums/themes/app_colors.dart';
+import 'package:albums/themes/app_diments.dart';
 import 'package:albums/themes/app_font_style.dart';
 import 'package:albums/widgets/common/favorites_button.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +14,22 @@ class AlbumListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: AppDimens.containerDefaultSpacingAll,
         decoration: BoxDecoration(
           border: Border.all(width: 0.1),
         ),
         child: Row(
           children: [
-            const CircleAvatar(
-              backgroundColor: AppColors.backgroundColor,
+            CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               child: Icon(
                 Icons.article,
-                color: AppColors.primaryColor,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 8),
+                padding: AppDimens.leftNormalSpacing,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -45,9 +45,9 @@ class AlbumListItemWidget extends StatelessWidget {
             ),
             const FavoritesButton(),
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: AppColors.primaryColor,
+                color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {
                 Navigator.of(context).push(

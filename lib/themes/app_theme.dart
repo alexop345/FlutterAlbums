@@ -7,10 +7,7 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.backgroundColor,
-      // iconTheme: IconThemeData(color: Colors.red),
-      // actionsIconTheme: IconThemeData(color: Colors.amber),
-      titleTextStyle: AppFontStyle.appBarText
-    ),
+        backgroundColor: AppColors.backgroundColor,
+        titleTextStyle: AppFontStyle.appBarText),
   );
 }

@@ -29,7 +29,7 @@ class _FavoritesButtonState extends State<FavoritesButton> {
       },
       icon: Icon(
         isFavorite ? iconFavorite : iconUnfavorite,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.primary,
         key: ValueKey(isFavorite),
       ),
     );
