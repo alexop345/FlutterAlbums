@@ -4,11 +4,11 @@ part 'album.g.dart';
 
 @JsonSerializable()
 class Album {
-  int userId;
-  int id;
-  String title;
+  final int userId;
+  final int id;
+  final String title;
 
-  Album({
+  const Album({
     required this.userId,
     required this.id,
     required this.title,

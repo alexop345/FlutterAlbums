@@ -32,17 +32,21 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
-            final List<Album> albums = snapshot.data!;
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: albums.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: AlbumListItemWidget(albums[index]),
-                );
-              },
-            );
+            final List<Album> albums = snapshot.data ?? [];
+            return (albums.isNotEmpty)
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: albums.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: AlbumListItemWidget(albums[index]),
+                      );
+                    },
+                  )
+                : const Center(
+                    child: Text('No albums available!'),
+                  );
           }
           return const Center(
             child: CircularProgressIndicator(),
