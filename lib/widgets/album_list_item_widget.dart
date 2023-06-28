@@ -2,8 +2,7 @@ import 'package:albums/models/album.dart';
 import 'package:albums/screens/album_details/album_details_screen.dart';
 import 'package:albums/themes/app_colors.dart';
 import 'package:albums/themes/app_font_style.dart';
-import 'package:albums/themes/app_icons.dart';
-import 'package:albums/widgets/common/toggle_icon_button.dart';
+import 'package:albums/widgets/common/favorites_button.dart';
 import 'package:flutter/material.dart';
 
 class AlbumListItemWidget extends StatelessWidget {
@@ -44,10 +43,7 @@ class AlbumListItemWidget extends StatelessWidget {
                 ),
               ),
             ),
-            const ToggleIconButton(
-              toggleIcon: AppIcons.favoriteIcon,
-              untoggleIcon: AppIcons.notFavoriteIcon,
-            ),
+            const FavoritesButton(),
             IconButton(
               icon: const Icon(
                 Icons.arrow_forward_ios_rounded,
