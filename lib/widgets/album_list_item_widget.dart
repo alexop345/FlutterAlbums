@@ -4,6 +4,7 @@ import 'package:albums/themes/app_diments.dart';
 import 'package:albums/themes/app_font_style.dart';
 import 'package:albums/widgets/common/favorites_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AlbumListItemWidget extends StatelessWidget {
   final Album album;
@@ -38,7 +39,8 @@ class AlbumListItemWidget extends StatelessWidget {
                       album.title,
                       style: AppFontStyle.titleText,
                     ),
-                    Text('Album with id: ${album.id}'),
+                    // Text('Album with id: ${album.id}'),
+                    Text(AppLocalizations.of(context)!.albumId(album.id)),
                   ],
                 ),
               ),
