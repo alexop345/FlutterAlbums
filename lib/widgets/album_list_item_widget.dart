@@ -39,7 +39,6 @@ class AlbumListItemWidget extends StatelessWidget {
                       album.title,
                       style: AppFontStyle.titleText,
                     ),
-                    // Text('Album with id: ${album.id}'),
                     Text(AppLocalizations.of(context)!.albumId(album.id)),
                   ],
                 ),

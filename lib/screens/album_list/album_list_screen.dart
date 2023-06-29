@@ -41,7 +41,7 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
                     children: [
                       Text(
                         'Results updated: ${updatedTime}',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),

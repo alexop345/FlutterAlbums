@@ -1,5 +1,6 @@
 import 'package:albums/models/album.dart';
 import 'package:albums/networking/albums_service.dart';
+import 'package:albums/networking/enpoint_structure.dart';
 import 'package:albums/networking/network_availability.dart';
 import 'package:albums/repo/shared_pref_repo.dart';
 import 'package:dio/dio.dart';
@@ -15,7 +16,7 @@ class AlbumsRepo {
         sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo();
 
   Stream<Map<int, List<Album>>> getAlbums() {
-    return Stream.fromFuture(hasNetwork(AlbumsService.urlDomain))
+    return Stream.fromFuture(hasNetwork(urlDomain))
         .flatMap((bool isNetwork) {
       if (isNetwork) {
         return Stream.fromFuture(albumsService.getAlbums())
