@@ -36,4 +36,20 @@ class AlbumsRepo {
         .setString(StorageKey.albums, Album.encode(albums))
         .map((value) => albums);
   }
+
+  Stream<int> setAlbumsDateUpdated() {
+    int updated = DateTime.now().millisecondsSinceEpoch;
+    return sharedPrefRepo.setString(StorageKey.albumsDateUpdated, updated.toString()).map((event){
+      return updated;
+    });
+  }
+
+  Stream<int> getAlbumsDateUpdated() {
+    return sharedPrefRepo.getString(StorageKey.albumsDateUpdated).map((event){
+      if (event != null) {
+        return int.parse(event);
+      }
+      return DateTime.now().millisecondsSinceEpoch;
+    });
+  }
 }

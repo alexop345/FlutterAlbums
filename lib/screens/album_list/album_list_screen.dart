@@ -35,15 +35,28 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
           if (snapshot.hasData || snapshot.hasError) {
             final List<Album> albums = snapshot.data ?? [];
             return (albums.isNotEmpty)
-                ? ListView.builder(
-                    padding: AppDimens.containerDefaultSpacingAll ,
-                    itemCount: albums.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: AppDimens.bottomDefaultSpacing,
-                        child: AlbumListItemWidget(albums[index]),
-                      );
-                    },
+                ? Column(
+                    children: [
+                      Text(
+                        'Results updated just now',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: AppDimens.containerDefaultSpacingAll,
+                          itemCount: albums.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: AppDimens.bottomDefaultSpacing,
+                              child: AlbumListItemWidget(albums[index]),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   )
                 : const Center(
                     child: Text('No albums available!'),
