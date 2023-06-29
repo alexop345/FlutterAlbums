@@ -39,7 +39,7 @@ class AlbumsRepo {
 
   Stream<AlbumsLocal> setLocalAlbums(AlbumsLocal albums) {
     return sharedPrefRepo
-        .setString(StorageKey.albums, albums.toJson().toString())
+        .setString(StorageKey.albums, jsonEncode(albums.toJson()))
         .map((value) => albums);
   }
 
