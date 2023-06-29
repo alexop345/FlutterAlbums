@@ -21,5 +21,4 @@ class SharedPrefRepo {
 
 enum StorageKey {
   albums,
-  albumsDateUpdated,
 }

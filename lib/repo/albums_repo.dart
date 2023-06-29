@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:albums/models/album.dart';
+import 'package:albums/models/albums_local.dart';
 import 'package:albums/networking/albums_service.dart';
 import 'package:albums/networking/enpoint_structure.dart';
 import 'package:albums/networking/network_availability.dart';
@@ -15,48 +18,36 @@ class AlbumsRepo {
             AlbumsService(Dio(BaseOptions(contentType: "application/json"))),
         sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo();
 
-  Stream<Map<int, List<Album>>> getAlbums() {
-    return Stream.fromFuture(hasNetwork(urlDomain))
-        .flatMap((bool isNetwork) {
+  Stream<AlbumsLocal> getAlbums() {
+    return Stream.fromFuture(hasNetwork(urlDomain)).flatMap((bool isNetwork) {
       if (isNetwork) {
         return Stream.fromFuture(albumsService.getAlbums())
             .flatMap((List<Album> albums) {
-          return setAlbums(albums).flatMap((event) {
-            return setAlbumsDateUpdated().map((event) {
-              return {event: albums};
-            });
+          AlbumsLocal albumsLocal = AlbumsLocal(
+              updatedDate: DateTime.now().millisecondsSinceEpoch,
+              albums: albums);
+          return setLocalAlbums(albumsLocal).map((event) {
+            return albumsLocal;
           });
         });
       }
-      return sharedPrefRepo.getString(StorageKey.albums).flatMap((value) {
-        return getAlbumsDateUpdated().map((event) {
-          return {event: value != null ? Album.decode(value) : []};
-        });
+      return getLocalAlbums().map((value) {
+        return value;
       });
     });
   }
 
-  Stream<List<Album>> setAlbums(List<Album> albums) {
+  Stream<AlbumsLocal> setLocalAlbums(AlbumsLocal albums) {
     return sharedPrefRepo
-        .setString(StorageKey.albums, Album.encode(albums))
+        .setString(StorageKey.albums, albums.toJson().toString())
         .map((value) => albums);
   }
 
-  Stream<int> setAlbumsDateUpdated() {
-    int updated = DateTime.now().millisecondsSinceEpoch;
-    return sharedPrefRepo
-        .setString(StorageKey.albumsDateUpdated, updated.toString())
-        .map((event) {
-      return updated;
-    });
-  }
-
-  Stream<int> getAlbumsDateUpdated() {
-    return sharedPrefRepo.getString(StorageKey.albumsDateUpdated).map((event) {
-      if (event != null) {
-        return int.parse(event);
-      }
-      return DateTime.now().millisecondsSinceEpoch;
+  Stream<AlbumsLocal> getLocalAlbums() {
+    return sharedPrefRepo.getString(StorageKey.albums).map((value) {
+      return value != null
+          ? AlbumsLocal.fromJson(jsonDecode(value))
+          : const AlbumsLocal(updatedDate: 0, albums: []);
     });
   }
 }

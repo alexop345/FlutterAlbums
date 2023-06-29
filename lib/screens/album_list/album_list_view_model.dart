@@ -1,4 +1,4 @@
-import 'package:albums/models/album.dart';
+import 'package:albums/models/albums_local.dart';
 import 'package:albums/repo/albums_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -8,7 +8,7 @@ class AlbumListViewModel {
   late final Output output;
 
   AlbumListViewModel(this.input, {repo}): albumsRepo = repo ?? AlbumsRepo() {
-    Stream<Map<int, List<Album>>> albumList = input.getList.startWith(null).flatMap((_) {
+    Stream<AlbumsLocal> albumList = input.getList.startWith(null).flatMap((_) {
       return albumsRepo.getAlbums();
     });
 
@@ -23,7 +23,7 @@ class Input {
 }
 
 class Output {
-  final Stream<Map<int, List<Album>>> albumList;
+  final Stream<AlbumsLocal> albumList;
 
   Output(this.albumList);
 }
