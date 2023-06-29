@@ -12,16 +12,16 @@ import 'package:rxdart/rxdart.dart';
 class AlbumsRepo {
   final AlbumsService albumsService;
   final SharedPrefRepo sharedPrefRepo;
-  final NetworkConnection networkConnection;
+  NetworkConnection networkConnection;
 
   AlbumsRepo({albumsService, sharedPrefRepo, networkConnection})
       : albumsService = albumsService ??
             AlbumsService(Dio(BaseOptions(contentType: "application/json"))),
         sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo(),
-        networkConnection = networkConnection ?? NetworkConnection();
+        networkConnection = networkConnection ?? const NetworkConnection(url: urlDomain);
 
   Stream<AlbumsLocal> getAlbums() {
-    return Stream.fromFuture(networkConnection.hasNetwork(urlDomain)).flatMap((bool isNetwork) {
+    return Stream.fromFuture(networkConnection.hasNetwork()).flatMap((bool isNetwork) {
       if (isNetwork) {
         return Stream.fromFuture(albumsService.getAlbums())
             .flatMap((List<Album> albums) {
