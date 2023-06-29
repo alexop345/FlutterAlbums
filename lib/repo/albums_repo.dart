@@ -4,7 +4,7 @@ import 'package:albums/models/album.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:albums/networking/albums_service.dart';
 import 'package:albums/networking/enpoint_structure.dart';
-import 'package:albums/networking/network_availability.dart';
+import 'package:albums/networking/network_connection.dart';
 import 'package:albums/repo/shared_pref_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,14 +12,16 @@ import 'package:rxdart/rxdart.dart';
 class AlbumsRepo {
   final AlbumsService albumsService;
   final SharedPrefRepo sharedPrefRepo;
+  final NetworkConnection networkConnection;
 
-  AlbumsRepo({albumsService, sharedPrefRepo})
+  AlbumsRepo({albumsService, sharedPrefRepo, networkConnection})
       : albumsService = albumsService ??
             AlbumsService(Dio(BaseOptions(contentType: "application/json"))),
-        sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo();
+        sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo(),
+        networkConnection = networkConnection ?? NetworkConnection();
 
   Stream<AlbumsLocal> getAlbums() {
-    return Stream.fromFuture(hasNetwork(urlDomain)).flatMap((bool isNetwork) {
+    return Stream.fromFuture(networkConnection.hasNetwork(urlDomain)).flatMap((bool isNetwork) {
       if (isNetwork) {
         return Stream.fromFuture(albumsService.getAlbums())
             .flatMap((List<Album> albums) {

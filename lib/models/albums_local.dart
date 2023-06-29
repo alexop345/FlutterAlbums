@@ -15,4 +15,6 @@ class AlbumsLocal {
 
   factory AlbumsLocal.fromJson(Map<String, dynamic> json) => _$AlbumsLocalFromJson(json);
   Map<String, dynamic> toJson() => _$AlbumsLocalToJson(this);
+
+  Duration get passedTimeSinceLastUpdate => DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(updatedDate));
 }

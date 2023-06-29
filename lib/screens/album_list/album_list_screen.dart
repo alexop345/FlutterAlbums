@@ -4,6 +4,7 @@ import 'package:albums/themes/app_diments.dart';
 import 'package:albums/widgets/album_list_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AlbumListScreen extends StatefulWidget {
   const AlbumListScreen({super.key});
@@ -27,22 +28,28 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Albums'),
+        title: Text(AppLocalizations.of(context)!.appBarTitle),
       ),
       body: StreamBuilder<AlbumsLocal>(
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
             final AlbumsLocal albumsLocal = snapshot.data!;
+            final Duration lastUpdateDuration =
+                albumsLocal.passedTimeSinceLastUpdate;
             return (albumsLocal.albums.isNotEmpty)
                 ? Column(
                     children: [
                       Text(
-                        'Results updated: ${albumsLocal.updatedDate}',
+                        AppLocalizations.of(context)!.resultsUpdated(
+                            lastUpdateDuration.inDays,
+                            lastUpdateDuration.inHours,
+                            lastUpdateDuration.inMinutes),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
+                        textAlign: TextAlign.center,
                       ),
                       Expanded(
                         child: ListView.builder(
@@ -51,15 +58,16 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: AppDimens.bottomDefaultSpacing,
-                              child: AlbumListItemWidget(albumsLocal.albums[index]),
+                              child: AlbumListItemWidget(
+                                  albumsLocal.albums[index]),
                             );
                           },
                         ),
                       ),
                     ],
                   )
-                : const Center(
-                    child: Text('No albums available!'),
+                : Center(
+                    child: Text(AppLocalizations.of(context)!.noAlbums),
                   );
           }
           return const Center(
