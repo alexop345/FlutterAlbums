@@ -8,7 +8,7 @@ class AlbumListViewModel {
   late final Output output;
 
   AlbumListViewModel(this.input, {repo}): albumsRepo = repo ?? AlbumsRepo() {
-    Stream<List<Album>> albumList = input.getList.startWith(null).flatMap((_) {
+    Stream<Map<int, List<Album>>> albumList = input.getList.startWith(null).flatMap((_) {
       return albumsRepo.getAlbums();
     });
 
@@ -23,7 +23,7 @@ class Input {
 }
 
 class Output {
-  final Stream<List<Album>> albumList;
+  final Stream<Map<int, List<Album>>> albumList;
 
   Output(this.albumList);
 }

@@ -29,16 +29,18 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
       appBar: AppBar(
         title: const Text('Albums'),
       ),
-      body: StreamBuilder<List<Album>>(
+      body: StreamBuilder<Map<int, List<Album>>>(
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
-            final List<Album> albums = snapshot.data ?? [];
+            final data = snapshot.data;
+            final updatedTime = data!.keys.toList()[0];
+            final List<Album> albums = data[updatedTime] ?? [];
             return (albums.isNotEmpty)
                 ? Column(
                     children: [
                       Text(
-                        'Results updated just now',
+                        'Results updated: ${updatedTime}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
