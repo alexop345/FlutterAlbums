@@ -1,0 +1,9 @@
+{
+    "albumId": "Album with id: {id}",
+    "@albumId": {
+        "description": "A message with an id parameter",
+        "placeholders": {
+            "id": {}
+        }
+    }
+}
