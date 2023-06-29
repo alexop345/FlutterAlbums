@@ -4,10 +4,12 @@ import 'package:dio/dio.dart';
 
 part 'albums_service.g.dart';
 
-@RestApi(baseUrl: 'https://jsonplaceholder.typicode.com/')
+@RestApi(baseUrl: '${AlbumsService.urlProtocol}${AlbumsService.urlDomain}')
 abstract class AlbumsService {
+  static const String urlProtocol = 'https://';
+  static const String urlDomain = 'jsonplaceholder.typicode.com';
   factory AlbumsService(Dio dio) = _AlbumsService;
 
-  @GET('albums')
+  @GET('/albums')
   Future<List<Album>> getAlbums();
 }
