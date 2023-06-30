@@ -22,7 +22,7 @@ main() {
 
   test('fetch albums', () {
     final albums = AlbumsLocal(
-      updatedDate: DateTime.now().millisecondsSinceEpoch,
+      updatedDate: DateTime.now(),
       albums: [const Album(userId: 1, id: 1, title: 'Test album')],
     );
 

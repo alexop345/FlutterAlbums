@@ -18,7 +18,7 @@ main() {
   late AlbumsService albumsService;
   late NetworkConnection networkConnection;
 
-  const AlbumsLocal localAlbums = AlbumsLocal(updatedDate: 123, albums: [Album(userId: 1, id: 1, title: 'Test title')]);
+  AlbumsLocal localAlbums = AlbumsLocal(updatedDate: DateTime.now(), albums: const [Album(userId: 1, id: 1, title: 'Test title')]);
 
   setUp(() {
     sharedPrefRepo = MockSharedPrefRepo();

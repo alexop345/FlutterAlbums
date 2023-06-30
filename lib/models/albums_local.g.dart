@@ -7,7 +7,7 @@ part of 'albums_local.dart';
 // **************************************************************************
 
 AlbumsLocal _$AlbumsLocalFromJson(Map<String, dynamic> json) => AlbumsLocal(
-      updatedDate: json['updatedDate'] as int,
+      updatedDate: DateTime.parse(json['updatedDate'] as String),
       albums: (json['albums'] as List<dynamic>)
           .map((e) => Album.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,6 +15,6 @@ AlbumsLocal _$AlbumsLocalFromJson(Map<String, dynamic> json) => AlbumsLocal(
 
 Map<String, dynamic> _$AlbumsLocalToJson(AlbumsLocal instance) =>
     <String, dynamic>{
-      'updatedDate': instance.updatedDate,
+      'updatedDate': instance.updatedDate.toIso8601String(),
       'albums': instance.albums,
     };

@@ -26,7 +26,7 @@ class AlbumsRepo {
         return Stream.fromFuture(albumsService.getAlbums())
             .flatMap((List<Album> albums) {
           AlbumsLocal albumsLocal = AlbumsLocal(
-              updatedDate: DateTime.now().millisecondsSinceEpoch,
+              updatedDate: DateTime.now(),
               albums: albums);
           return setLocalAlbums(albumsLocal).map((event) {
             return albumsLocal;
@@ -47,7 +47,7 @@ class AlbumsRepo {
     return sharedPrefRepo.getString(StorageKey.albums).map((value) {
       return value != null
           ? AlbumsLocal.fromJson(jsonDecode(value))
-          : const AlbumsLocal(updatedDate: 0, albums: []);
+          : AlbumsLocal(updatedDate: DateTime.now(), albums: []);
     });
   }
 }

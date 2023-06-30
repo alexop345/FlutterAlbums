@@ -6,7 +6,7 @@ part 'albums_local.g.dart';
 
 @JsonSerializable()
 class AlbumsLocal {
-  final int updatedDate;
+  final DateTime updatedDate;
   final List<Album> albums;
 
   const AlbumsLocal({
@@ -17,5 +17,5 @@ class AlbumsLocal {
   factory AlbumsLocal.fromJson(Map<String, dynamic> json) => _$AlbumsLocalFromJson(json);
   Map<String, dynamic> toJson() => _$AlbumsLocalToJson(this);
 
-  LastUpdateDuration get passedTimeSinceLastUpdate => LastUpdateDuration(DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(updatedDate)));
+  LastUpdateDuration get passedTimeSinceLastUpdate => LastUpdateDuration(DateTime.now().difference(updatedDate));
 }
