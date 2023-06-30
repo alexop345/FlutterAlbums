@@ -1,4 +1,5 @@
 import 'package:albums/models/albums_local.dart';
+import 'package:albums/models/last_update_duration.dart';
 import 'package:albums/screens/album_list/album_list_view_model.dart';
 import 'package:albums/themes/app_diments.dart';
 import 'package:albums/widgets/album_list_item_widget.dart';
@@ -35,16 +36,16 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
             final AlbumsLocal albumsLocal = snapshot.data ?? const AlbumsLocal(updatedDate: 0, albums: []);
-            final Duration lastUpdateDuration =
+            final LastUpdateDuration lastUpdateDuration =
                 albumsLocal.passedTimeSinceLastUpdate;
             return (albumsLocal.albums.isNotEmpty)
                 ? Column(
                     children: [
                       Text(
                         AppLocalizations.of(context)!.resultsUpdated(
-                            lastUpdateDuration.inDays,
-                            lastUpdateDuration.inHours,
-                            lastUpdateDuration.inMinutes),
+                            lastUpdateDuration.days,
+                            lastUpdateDuration.hours,
+                            lastUpdateDuration.minutes),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
