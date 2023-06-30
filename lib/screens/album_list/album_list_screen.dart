@@ -1,9 +1,10 @@
-import 'package:albums/models/album.dart';
+import 'package:albums/models/albums_local.dart';
 import 'package:albums/screens/album_list/album_list_view_model.dart';
 import 'package:albums/themes/app_diments.dart';
 import 'package:albums/widgets/album_list_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AlbumListScreen extends StatefulWidget {
   const AlbumListScreen({super.key});
@@ -27,26 +28,46 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Albums'),
+        title: Text(AppLocalizations.of(context)!.appBarTitle),
       ),
-      body: StreamBuilder<List<Album>>(
+      body: StreamBuilder<AlbumsLocal>(
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
-            final List<Album> albums = snapshot.data ?? [];
-            return (albums.isNotEmpty)
-                ? ListView.builder(
-                    padding: AppDimens.containerDefaultSpacingAll ,
-                    itemCount: albums.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: AppDimens.bottomDefaultSpacing,
-                        child: AlbumListItemWidget(albums[index]),
-                      );
-                    },
+            final AlbumsLocal albumsLocal = snapshot.data ?? const AlbumsLocal(updatedDate: 0, albums: []);
+            final Duration lastUpdateDuration =
+                albumsLocal.passedTimeSinceLastUpdate;
+            return (albumsLocal.albums.isNotEmpty)
+                ? Column(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.resultsUpdated(
+                            lastUpdateDuration.inDays,
+                            lastUpdateDuration.inHours,
+                            lastUpdateDuration.inMinutes),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: AppDimens.containerDefaultSpacingAll,
+                          itemCount: albumsLocal.albums.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: AppDimens.bottomDefaultSpacing,
+                              child: AlbumListItemWidget(
+                                  albumsLocal.albums[index]),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   )
-                : const Center(
-                    child: Text('No albums available!'),
+                : Center(
+                    child: Text(AppLocalizations.of(context)!.noAlbums),
                   );
           }
           return const Center(

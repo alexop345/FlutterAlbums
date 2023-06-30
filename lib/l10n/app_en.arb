@@ -1,9 +1,12 @@
 {
+    "appBarTitle": "Albums",
     "albumId": "Album with id: {id}",
     "@albumId": {
         "description": "A message with an id parameter",
         "placeholders": {
             "id": {}
         }
-    }
+    },
+    "resultsUpdated": "Results updated {day} days, {hour} hours, {minute} minutes ago",
+    "noAlbums": "No albums available!"
 }
