@@ -34,7 +34,7 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
-            final AlbumsLocal albumsLocal = snapshot.data!;
+            final AlbumsLocal albumsLocal = snapshot.data ?? const AlbumsLocal(updatedDate: 0, albums: []);
             final Duration lastUpdateDuration =
                 albumsLocal.passedTimeSinceLastUpdate;
             return (albumsLocal.albums.isNotEmpty)

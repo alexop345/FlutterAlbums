@@ -33,9 +33,7 @@ class AlbumsRepo {
           });
         });
       }
-      return getLocalAlbums().map((value) {
-        return value;
-      });
+      return getLocalAlbums();
     });
   }
 
