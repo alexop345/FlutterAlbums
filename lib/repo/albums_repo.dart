@@ -12,7 +12,7 @@ import 'package:rxdart/rxdart.dart';
 class AlbumsRepo {
   final AlbumsService albumsService;
   final SharedPrefRepo sharedPrefRepo;
-  NetworkConnection networkConnection;
+  final NetworkConnection networkConnection;
 
   AlbumsRepo({albumsService, sharedPrefRepo, networkConnection})
       : albumsService = albumsService ??
