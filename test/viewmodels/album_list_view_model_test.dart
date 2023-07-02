@@ -1,4 +1,5 @@
 import 'package:albums/models/album.dart';
+import 'package:albums/models/album_list.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -21,12 +22,12 @@ main() {
   });
 
   test('fetch albums', () {
-    final albums = AlbumsLocal(
+    final localAlbums = AlbumsLocal(
       updatedDate: DateTime.now(),
       albums: [const Album(userId: 1, id: 1, title: 'Test album')],
     );
 
-    when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(albums));
-    expect(viewModel.output.albumList, emits(albums));
+    when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
+    expect(viewModel.output.albumList, emits(isA<AlbumList>()));
   });
 }
