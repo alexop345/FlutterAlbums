@@ -5,8 +5,8 @@ class AlbumListData {
   final LastUpdate? lastUpdate;
   final bool isRecent;
 
-  AlbumListData.fromDate({required this.albums, required DateTime date})
-      : lastUpdate = LastUpdate.fromDate(date),
+  AlbumListData.fromDate({required this.albums, required DateTime date, DateTime? now})
+      : lastUpdate = LastUpdate.fromDate(date, now ?? DateTime.now()),
         isRecent = false;
 
   AlbumListData.recent({required this.albums})
@@ -29,8 +29,8 @@ class LastUpdate {
   late int time;
   late String period;
 
-  LastUpdate.fromDate(DateTime date) {
-    Duration duration = DateTime.now().difference(date);
+  LastUpdate.fromDate(DateTime old, DateTime now) {
+    Duration duration = now.difference(old);
     if (duration.inMinutes < 60) {
       time = duration.inMinutes;
       period = 'm';
