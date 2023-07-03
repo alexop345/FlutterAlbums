@@ -12,6 +12,17 @@ class AlbumListData {
   AlbumListData.recent({required this.albums})
       : lastUpdate = null,
         isRecent = true;
+
+  @override
+  int get hashCode => isRecent.hashCode ^ lastUpdate.hashCode ^ albums.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AlbumListData &&
+          isRecent == other.isRecent &&
+          lastUpdate == other.lastUpdate &&
+          albums == other.albums;
 }
 
 class LastUpdate {
@@ -31,4 +42,15 @@ class LastUpdate {
       period = 'd';
     }
   }
+
+  @override
+  int get hashCode => time.hashCode ^ period.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LastUpdate &&
+          time == other.time &&
+          period == other.period;
+  
 }

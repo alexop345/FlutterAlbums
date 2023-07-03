@@ -12,22 +12,37 @@ import '../mocks/repo_mock.dart';
 main() {
   late AlbumsRepo repo;
   late AlbumListViewModel viewModel;
+  late DateTime nowDate;
+  late DateTime oldDate;
 
   setUp(() {
     repo = MockAlbumsRepo();
+    nowDate = DateTime.now();
+    oldDate = DateTime.utc(2023, 5, 5);
     viewModel = AlbumListViewModel(
       Input(BehaviorSubject<void>()),
       repo: repo,
+      currentDate: nowDate,
     );
   });
 
-  test('fetch albums', () {
+  test('albums should have been updated recently', () {
     final localAlbums = AlbumsLocal(
-      updatedDate: DateTime.now(),
+      updatedDate: nowDate,
       albums: [const Album(userId: 1, id: 1, title: 'Test album')],
     );
 
     when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
-    expect(viewModel.output.albumList, emits(isA<AlbumListData>()));
+    expect(viewModel.output.albumList, emits(AlbumListData.recent(albums: localAlbums.albums)));
+  });
+
+  test('albums should have been updated earlier', () {
+    final localAlbums = AlbumsLocal(
+      updatedDate: oldDate,
+      albums: [const Album(userId: 1, id: 1, title: 'Test album')],
+    );
+
+    when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
+    expect(viewModel.output.albumList, emits(AlbumListData.fromDate(albums: localAlbums.albums, date: localAlbums.updatedDate)));
   });
 }
