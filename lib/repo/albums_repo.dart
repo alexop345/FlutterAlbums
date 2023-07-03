@@ -13,21 +13,24 @@ class AlbumsRepo {
   final AlbumsService albumsService;
   final SharedPrefRepo sharedPrefRepo;
   final NetworkConnection networkConnection;
+  final DateTime now;
 
-  AlbumsRepo({albumsService, sharedPrefRepo, networkConnection})
+  AlbumsRepo({albumsService, sharedPrefRepo, networkConnection, currentDate})
       : albumsService = albumsService ??
             AlbumsService(Dio(BaseOptions(contentType: "application/json"))),
         sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo(),
-        networkConnection = networkConnection ?? const NetworkConnection(url: urlDomain);
+        networkConnection =
+            networkConnection ?? const NetworkConnection(url: urlDomain),
+        now = currentDate ?? DateTime.now();
 
   Stream<AlbumsLocal> getAlbums() {
-    return Stream.fromFuture(networkConnection.hasNetwork()).flatMap((bool isNetwork) {
+    return Stream.fromFuture(networkConnection.hasNetwork())
+        .flatMap((bool isNetwork) {
       if (isNetwork) {
         return Stream.fromFuture(albumsService.getAlbums())
             .flatMap((List<Album> albums) {
-          AlbumsLocal albumsLocal = AlbumsLocal(
-              updatedDate: DateTime.now(),
-              albums: albums);
+          AlbumsLocal albumsLocal =
+              AlbumsLocal(updatedDate: DateTime.now(), albums: albums);
           return setLocalAlbums(albumsLocal).map((event) {
             return albumsLocal;
           });

@@ -1,5 +1,5 @@
 import 'package:albums/models/album.dart';
-import 'package:albums/models/album_list.dart';
+import 'package:albums/models/album_list_data.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -28,6 +28,6 @@ main() {
     );
 
     when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
-    expect(viewModel.output.albumList, emits(isA<AlbumList>()));
+    expect(viewModel.output.albumList, emits(isA<AlbumListData>()));
   });
 }
