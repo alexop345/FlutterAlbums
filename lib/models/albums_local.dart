@@ -15,4 +15,15 @@ class AlbumsLocal {
 
   factory AlbumsLocal.fromJson(Map<String, dynamic> json) => _$AlbumsLocalFromJson(json);
   Map<String, dynamic> toJson() => _$AlbumsLocalToJson(this);
+
+
+  @override
+  int get hashCode => updatedDate.hashCode ^ albums.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AlbumsLocal &&
+          updatedDate == other.updatedDate &&
+          albums == other.albums;
 }
