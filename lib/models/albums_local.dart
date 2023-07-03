@@ -1,4 +1,5 @@
 import 'package:albums/models/album.dart';
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'albums_local.g.dart';
@@ -25,5 +26,5 @@ class AlbumsLocal {
       identical(this, other) ||
       other is AlbumsLocal &&
           updatedDate == other.updatedDate &&
-          albums == other.albums;
+          listEquals(albums, other.albums);
 }

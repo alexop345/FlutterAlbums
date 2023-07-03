@@ -17,7 +17,7 @@ main() {
 
   setUp(() {
     repo = MockAlbumsRepo();
-    now = DateTime(2023, 5, 5, 10, 10);
+    now = DateTime.now();
     threshold = 2;
     viewModel = AlbumListViewModel(
       Input(BehaviorSubject<void>()),
