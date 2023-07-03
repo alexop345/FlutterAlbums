@@ -31,9 +31,23 @@ main() {
     );
   });
 
-  test('test', () {
+  test('hasNetwork is called', () {
     when(() => networkConnection.hasNetwork()).thenAnswer((_) => Future(() => false));
     when(() => sharedPrefRepo.getString(StorageKey.albums)).thenAnswer((_) => Stream.value(jsonEncode(localAlbums)));
-    expect(albumsRepo.getAlbums(), emits(localAlbums));
+    expect(albumsRepo.getAlbums(), emits(isA<AlbumsLocal>()));
+    verify(() => networkConnection.hasNetwork()).called(1);
+  });
+
+  test('sharedPref getString is called', () {
+    when(() => sharedPrefRepo.getString(StorageKey.albums)).thenAnswer((_) => Stream.value(jsonEncode(localAlbums)));
+    expect(albumsRepo.getLocalAlbums(), emits(isA<AlbumsLocal>()));
+    verify(() => sharedPrefRepo.getString(StorageKey.albums)).called(1);
+  });
+
+
+  test('sharedPref setString is called', () {
+     when(() => sharedPrefRepo.setString(StorageKey.albums, jsonEncode(localAlbums.toJson()))).thenAnswer((_) => Stream.value(true));
+    expect(albumsRepo.setLocalAlbums(localAlbums), emits(isA<AlbumsLocal>()));
+    verify(() => sharedPrefRepo.setString(StorageKey.albums, jsonEncode(localAlbums.toJson()))).called(1);
   });
 }
