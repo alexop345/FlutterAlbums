@@ -17,34 +17,41 @@ class AlbumListViewModel {
 
     Stream<AlbumListData> albumList = input.getList.startWith(null).flatMap(
       (_) {
-        DateHelper helper = DateHelper();
-        return albumsRepo.getAlbums().map(
-          (AlbumsLocal locals) {
-            return helper.now.difference(locals.updatedDate).inMinutes >
-                    thresholdInMinutes
-                ? AlbumListData.fromDate(
-                    albums: locals.albums,
-                    oldDate: locals.updatedDate,
-                    nowDate: helper.now,
-                  )
-                : AlbumListData.recent(albums: locals.albums);
-          },
-        );
+        return Stream.fromFuture(Future.delayed(Duration(seconds: 2)))
+            .flatMap((value) {
+          DateHelper helper = DateHelper();
+          return albumsRepo.getAlbums().map(
+            (AlbumsLocal locals) {
+              return helper.now.difference(locals.updatedDate).inMinutes >
+                      thresholdInMinutes
+                  ? AlbumListData.fromDate(
+                      albums: locals.albums,
+                      oldDate: locals.updatedDate,
+                      nowDate: helper.now,
+                    )
+                  : AlbumListData.recent(albums: locals.albums);
+            },
+          );
+        });
       },
     );
 
-    output = Output(albumList);
+    Stream<bool> onReload = input.reload.map((value) => value);
+
+    output = Output(albumList, onReload);
   }
 }
 
 class Input {
   final Subject<void> getList;
+  final Subject<bool> reload;
 
-  Input(this.getList);
+  Input(this.getList, this.reload);
 }
 
 class Output {
   final Stream<AlbumListData> albumList;
+  final Stream<bool> onReload;
 
-  Output(this.albumList);
+  Output(this.albumList, this.onReload);
 }
