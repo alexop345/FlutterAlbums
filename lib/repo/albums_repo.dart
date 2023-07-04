@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:albums/helper/date_helper.dart';
 import 'package:albums/models/album.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:albums/networking/albums_service.dart';
@@ -13,17 +14,18 @@ class AlbumsRepo {
   final AlbumsService albumsService;
   final SharedPrefRepo sharedPrefRepo;
   final NetworkConnection networkConnection;
-  final DateTime now;
+  final DateHelper dateHelper;
 
-  AlbumsRepo({albumsService, sharedPrefRepo, networkConnection, currentDate})
+  AlbumsRepo({albumsService, sharedPrefRepo, networkConnection, dateHelper})
       : albumsService = albumsService ??
             AlbumsService(Dio(BaseOptions(contentType: "application/json"))),
         sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo(),
         networkConnection =
             networkConnection ?? const NetworkConnection(url: urlDomain),
-        now = currentDate ?? DateTime.now();
+        dateHelper = dateHelper ?? DateHelper();
 
   Stream<AlbumsLocal> getAlbums() {
+    DateTime now = dateHelper.now;
     return Stream.fromFuture(networkConnection.hasNetwork())
         .flatMap((bool isNetwork) {
       if (isNetwork) {
@@ -50,7 +52,7 @@ class AlbumsRepo {
     return sharedPrefRepo.getString(StorageKey.albums).map((value) {
       return value != null
           ? AlbumsLocal.fromJson(jsonDecode(value))
-          : AlbumsLocal(updatedDate: now, albums: []);
+          : AlbumsLocal(updatedDate: dateHelper.now, albums: []);
     });
   }
 }

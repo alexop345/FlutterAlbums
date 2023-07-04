@@ -1,3 +1,4 @@
+import 'package:albums/helper/date_helper.dart';
 import 'package:albums/models/album.dart';
 
 class AlbumListData {
@@ -5,8 +6,8 @@ class AlbumListData {
   final LastUpdate? lastUpdate;
   final bool isRecent;
 
-  AlbumListData.fromDate({required this.albums, required DateTime date, DateTime? now})
-      : lastUpdate = LastUpdate.fromDate(date, now ?? DateTime.now()),
+  AlbumListData.fromDate({required this.albums, required DateTime oldDate, DateTime? nowDate})
+      : lastUpdate = LastUpdate.fromDate(oldDate, nowDate ?? DateHelper().now),
         isRecent = false;
 
   AlbumListData.recent({required this.albums})

@@ -1,3 +1,4 @@
+import 'package:albums/helper/date_helper.dart';
 import 'package:albums/models/album_list_data.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:albums/repo/albums_repo.dart';
@@ -7,22 +8,22 @@ class AlbumListViewModel {
   late final AlbumsRepo albumsRepo;
   final Input input;
   late final Output output;
-  late final DateTime now;
-  late final int threshold;
+  late final int thresholdInMinutes;
+  late final DateHelper helper;
 
-  AlbumListViewModel(this.input, {repo, currentDate, durationThreshold}) {
-    now = currentDate ?? DateTime.now();
-    albumsRepo = repo ?? AlbumsRepo(currentDate: now);
-    threshold = durationThreshold ?? 2;
+  AlbumListViewModel(this.input, {repo, currentDate, durationThresholdInMinutes, dateHelper}) {
+    albumsRepo = repo ?? AlbumsRepo();
+    thresholdInMinutes = durationThresholdInMinutes ?? 2;
+    helper = dateHelper ?? DateHelper();
 
     Stream<AlbumListData> albumList =
         input.getList.startWith(null).flatMap((_) {
       return albumsRepo.getAlbums().map((AlbumsLocal locals) {
-        return now.difference(locals.updatedDate).inMinutes > threshold
+        return helper.now.difference(locals.updatedDate).inMinutes > thresholdInMinutes
             ? AlbumListData.fromDate(
                 albums: locals.albums,
-                date: locals.updatedDate,
-                now: now,
+                oldDate: locals.updatedDate,
+                nowDate: helper.now,
               )
             : AlbumListData.recent(albums: locals.albums);
       });
