@@ -28,7 +28,6 @@ main() {
       repo: repo,
       currentDate: now,
       durationThresholdInMinutes: thresholdInMinutes,
-      dateHelper: dateHelper,
     );
     when(() => dateHelper.now).thenAnswer((_) => now);
   });

@@ -9,25 +9,29 @@ class AlbumListViewModel {
   final Input input;
   late final Output output;
   late final int thresholdInMinutes;
-  late final DateHelper helper;
 
-  AlbumListViewModel(this.input, {repo, currentDate, durationThresholdInMinutes, dateHelper}) {
+  AlbumListViewModel(this.input,
+      {repo, currentDate, durationThresholdInMinutes}) {
     albumsRepo = repo ?? AlbumsRepo();
-    thresholdInMinutes = durationThresholdInMinutes ?? 2;
-    helper = dateHelper ?? DateHelper();
+    thresholdInMinutes = durationThresholdInMinutes ?? 1;
 
-    Stream<AlbumListData> albumList =
-        input.getList.startWith(null).flatMap((_) {
-      return albumsRepo.getAlbums().map((AlbumsLocal locals) {
-        return helper.now.difference(locals.updatedDate).inMinutes > thresholdInMinutes
-            ? AlbumListData.fromDate(
-                albums: locals.albums,
-                oldDate: locals.updatedDate,
-                nowDate: helper.now,
-              )
-            : AlbumListData.recent(albums: locals.albums);
-      });
-    });
+    Stream<AlbumListData> albumList = input.getList.startWith(null).flatMap(
+      (_) {
+        DateHelper helper = DateHelper();
+        return albumsRepo.getAlbums().map(
+          (AlbumsLocal locals) {
+            return helper.now.difference(locals.updatedDate).inMinutes >
+                    thresholdInMinutes
+                ? AlbumListData.fromDate(
+                    albums: locals.albums,
+                    oldDate: locals.updatedDate,
+                    nowDate: helper.now,
+                  )
+                : AlbumListData.recent(albums: locals.albums);
+          },
+        );
+      },
+    );
 
     output = Output(albumList);
   }

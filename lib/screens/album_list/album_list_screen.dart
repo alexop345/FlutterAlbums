@@ -34,19 +34,37 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
-            final AlbumListData albumListData = snapshot.data ?? AlbumListData.recent(albums: []);
+            final AlbumListData albumListData =
+                snapshot.data ?? AlbumListData.recent(albums: []);
             return (albumListData.albums.isNotEmpty)
                 ? Column(
                     children: [
                       Text(
-                        albumListData.isRecent 
-                          ? AppLocalizations.of(context)!.resultsUpdatedNow 
-                          : AppLocalizations.of(context)!.resultsUpdated(albumListData.lastUpdate!.period, albumListData.lastUpdate!.time),
+                        albumListData.isRecent
+                            ? AppLocalizations.of(context)!.resultsUpdatedNow
+                            : AppLocalizations.of(context)!.resultsUpdated(
+                                albumListData.lastUpdate!.period,
+                                albumListData.lastUpdate!.time),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
                         textAlign: TextAlign.center,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Future.delayed(const Duration(seconds: 2), () {
+                          _albumListViewModel.input.getList.add(null);
+                          });
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primaryContainer,
+                        ),
+                        child: Icon(
+                          Icons.refresh,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       Expanded(
                         child: ListView.builder(
