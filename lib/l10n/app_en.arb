@@ -7,6 +7,8 @@
             "id": {}
         }
     },
-    "resultsUpdated": "Results updated {day} days, {hour} hours, {minute} minutes ago",
+    "resultsUpdated": "Results updated {t} {duration, select, d{days} h{hours} m{minutes} other{}} ago",
+    "resultsUpdatedNow": "Results updated just now",
     "noAlbums": "No albums available!"
+
 }

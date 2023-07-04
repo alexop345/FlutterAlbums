@@ -1,4 +1,4 @@
-import 'package:albums/models/albums_local.dart';
+import 'package:albums/models/album_list_data.dart';
 import 'package:albums/screens/album_list/album_list_view_model.dart';
 import 'package:albums/themes/app_diments.dart';
 import 'package:albums/widgets/album_list_item_widget.dart';
@@ -30,21 +30,18 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appBarTitle),
       ),
-      body: StreamBuilder<AlbumsLocal>(
+      body: StreamBuilder<AlbumListData>(
         stream: _albumListViewModel.output.albumList,
         builder: (ctx, snapshot) {
           if (snapshot.hasData || snapshot.hasError) {
-            final AlbumsLocal albumsLocal = snapshot.data ?? const AlbumsLocal(updatedDate: 0, albums: []);
-            final Duration lastUpdateDuration =
-                albumsLocal.passedTimeSinceLastUpdate;
-            return (albumsLocal.albums.isNotEmpty)
+            final AlbumListData albumListData = snapshot.data ?? AlbumListData.recent(albums: []);
+            return (albumListData.albums.isNotEmpty)
                 ? Column(
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.resultsUpdated(
-                            lastUpdateDuration.inDays,
-                            lastUpdateDuration.inHours,
-                            lastUpdateDuration.inMinutes),
+                        albumListData.isRecent 
+                          ? AppLocalizations.of(context)!.resultsUpdatedNow 
+                          : AppLocalizations.of(context)!.resultsUpdated(albumListData.lastUpdate!.period, albumListData.lastUpdate!.time),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
@@ -54,12 +51,12 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
                       Expanded(
                         child: ListView.builder(
                           padding: AppDimens.containerDefaultSpacingAll,
-                          itemCount: albumsLocal.albums.length,
+                          itemCount: albumListData.albums.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: AppDimens.bottomDefaultSpacing,
                               child: AlbumListItemWidget(
-                                  albumsLocal.albums[index]),
+                                  albumListData.albums[index]),
                             );
                           },
                         ),

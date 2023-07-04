@@ -1,6 +1,7 @@
 {
     "appBarTitle": "Albume",
     "albumId": "Album cu id-ul: {id} ",
-    "resultsUpdated": "Rezultatele au fost actualizate acum {day} zile, {hour} ore, {minute} minute",
+    "resultsUpdated": "Rezultatele au fost actualizate acum {t} {duration, select, d{zile} h{ore} m{minute} other{}}",
+    "resultsUpdatedNow": "Rezultatele au fost actualizate recent",
     "noAlbums": "Nu există albume disponibile!"
 }

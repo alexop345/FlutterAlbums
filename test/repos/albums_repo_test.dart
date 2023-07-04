@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:albums/helper/date_helper.dart';
 import 'package:albums/models/album.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:albums/networking/albums_service.dart';
@@ -17,23 +18,59 @@ main() {
   late SharedPrefRepo sharedPrefRepo;
   late AlbumsService albumsService;
   late NetworkConnection networkConnection;
-
-  const AlbumsLocal localAlbums = AlbumsLocal(updatedDate: 123, albums: [Album(userId: 1, id: 1, title: 'Test title')]);
+  late DateHelper dateHelper;
+  late DateTime now;
 
   setUp(() {
     sharedPrefRepo = MockSharedPrefRepo();
     albumsService = MockAlbumsService();
     networkConnection = MockNetworkConnection();
+    dateHelper = MockDateHelper();
+    now = DateTime.now();
     albumsRepo = AlbumsRepo(
       albumsService: albumsService,
       sharedPrefRepo: sharedPrefRepo,
       networkConnection: networkConnection,
+      dateHelper: dateHelper,
     );
+    when(() => dateHelper.now).thenAnswer((_) => now);
   });
 
-  test('test', () {
-    when(() => networkConnection.hasNetwork()).thenAnswer((_) => Future(() => false));
-    when(() => sharedPrefRepo.getString(StorageKey.albums)).thenAnswer((_) => Stream.value(jsonEncode(localAlbums)));
+  test('should emit value from shared preferences if is not null', () {
+    AlbumsLocal localAlbums = AlbumsLocal(
+      updatedDate: dateHelper.now,
+      albums: const [Album(userId: 1, id: 1, title: 'Test title')],
+    );
+    when(() => networkConnection.hasNetwork())
+        .thenAnswer((_) => Future(() => false));
+    when(() => sharedPrefRepo.getString(StorageKey.albums))
+        .thenAnswer((_) => Stream.value(jsonEncode(localAlbums)));
+
+    expect(albumsRepo.getAlbums(), emits(localAlbums));
+  });
+
+  test('should emit empty value if shared preferences returns null', () {
+    when(() => networkConnection.hasNetwork())
+        .thenAnswer((_) => Future(() => false));
+    when(() => sharedPrefRepo.getString(StorageKey.albums))
+        .thenAnswer((_) => Stream.value(null));
+    expect(albumsRepo.getAlbums(),
+        emits(AlbumsLocal(updatedDate: dateHelper.now, albums: [])));
+  });
+
+  test('should emit value from service', () {
+    AlbumsLocal localAlbums = AlbumsLocal(
+      updatedDate: dateHelper.now,
+      albums: const [Album(userId: 1, id: 1, title: 'Test title')],
+    );
+    when(() => networkConnection.hasNetwork())
+        .thenAnswer((_) => Future(() => true));
+    when(() => albumsService.getAlbums())
+        .thenAnswer((_) => Future(() => localAlbums.albums));
+    when(() => sharedPrefRepo.setString(
+            StorageKey.albums, jsonEncode(localAlbums.toJson())))
+        .thenAnswer((_) => Stream.value(true));
+
     expect(albumsRepo.getAlbums(), emits(localAlbums));
   });
 }
