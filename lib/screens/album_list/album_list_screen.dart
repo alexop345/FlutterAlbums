@@ -22,10 +22,7 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
   @override
   void initState() {
     super.initState();
-    _albumListViewModel = AlbumListViewModel(Input(
-      BehaviorSubject<void>(),
-      PublishSubject<bool>(),
-    ));
+    _albumListViewModel = AlbumListViewModel(Input(BehaviorSubject<void>()));
   }
 
   @override

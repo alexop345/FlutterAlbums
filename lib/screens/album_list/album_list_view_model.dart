@@ -3,6 +3,7 @@ import 'package:albums/models/album_list_data.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:albums/repo/albums_repo.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:async';
 
 class AlbumListViewModel {
   late final AlbumsRepo albumsRepo;
@@ -15,15 +16,17 @@ class AlbumListViewModel {
     albumsRepo = repo ?? AlbumsRepo();
     thresholdInMinutes = durationThresholdInMinutes ?? 1;
 
+    StreamController<bool> showLoadingController = StreamController();
+
     Stream<AlbumListData> albumList = input.getList.startWith(null).flatMap(
       (_) {
-        input.showLoading.add(true);
-        return Stream.fromFuture(Future.delayed(Duration(seconds: 2)))
+        showLoadingController.add(true);
+        return Stream.fromFuture(Future.delayed(const Duration(seconds: 2)))
             .flatMap((value) {
           DateHelper helper = DateHelper();
           return albumsRepo.getAlbums().map(
             (AlbumsLocal locals) {
-              input.showLoading.add(false);
+              showLoadingController.add(false);
               return helper.now.difference(locals.updatedDate).inMinutes >
                       thresholdInMinutes
                   ? AlbumListData.fromDate(
@@ -38,7 +41,7 @@ class AlbumListViewModel {
       },
     );
 
-    Stream<bool> showLoading = input.showLoading.map((bool value) {
+    Stream<bool> showLoading = showLoadingController.stream.map((bool value) {
       return value;
     });
 
@@ -48,9 +51,8 @@ class AlbumListViewModel {
 
 class Input {
   final Subject<void> getList;
-  final Subject<bool> showLoading;
 
-  Input(this.getList, this.showLoading);
+  Input(this.getList);
 }
 
 class Output {

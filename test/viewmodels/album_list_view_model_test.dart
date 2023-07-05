@@ -24,10 +24,7 @@ main() {
     now = DateTime.now();
     thresholdInMinutes = 2;
     viewModel = AlbumListViewModel(
-      Input(
-        BehaviorSubject<void>(),
-        PublishSubject<bool>(),
-      ),
+      Input(BehaviorSubject<void>()),
       repo: repo,
       currentDate: now,
       durationThresholdInMinutes: thresholdInMinutes,
