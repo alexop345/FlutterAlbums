@@ -39,7 +39,6 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
           StreamBuilder<AlbumListData>(
             stream: _albumListViewModel.output.albumList,
             builder: (ctx, snapshot) {
-               _albumListViewModel.input.reload.add(false);
               if (snapshot.hasData || snapshot.hasError) {
                 final AlbumListData albumListData =
                     snapshot.data ?? AlbumListData.recent(albums: []);
@@ -65,7 +64,6 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
                           TextButton(
                             onPressed: () {
                               _albumListViewModel.input.getList.add(null);
-                              _albumListViewModel.input.reload.add(true);
                             },
                             style: TextButton.styleFrom(
                               backgroundColor: Theme.of(context)
@@ -96,22 +94,19 @@ class _AlbumListScreenState extends State<AlbumListScreen> {
                         child: Text(AppLocalizations.of(context)!.noAlbums),
                       );
               }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
-          StreamBuilder<bool>(
-            stream: _albumListViewModel.output.onReload,
-            builder: (ctx, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data == true) {
-                  return const OverlayLoading();
-                }
-              }
               return Container();
             },
           ),
+          StreamBuilder<bool>(
+              stream: _albumListViewModel.output.showLoading,
+              builder: (ctx, snapshot) {
+                if (snapshot.hasData && snapshot.data == true) {
+                  return const Center(
+                    child: OverlayLoading(),
+                  );
+                }
+                return Container();
+              }),
         ],
       ),
     );
