@@ -1,6 +1,6 @@
 import 'package:albums/helper/date_helper.dart';
 import 'package:albums/models/album.dart';
-import 'package:albums/models/album_list_data.dart';
+import 'package:albums/screens/album_list/album_list_data.dart';
 import 'package:albums/models/albums_local.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
