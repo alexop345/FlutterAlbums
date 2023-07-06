@@ -1,5 +1,4 @@
 import 'package:albums/models/album.dart';
-import 'package:albums/models/albums_local.dart';
 import 'package:albums/models/ui_model.dart';
 import 'package:albums/repo/albums_repo.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,11 +11,10 @@ class AlbumDetailsViewModel {
   AlbumDetailsViewModel(this.input, {repo})
       : albumsRepo = repo ?? AlbumsRepo() {
     Stream<UIModel<Album>> album = input.getAlbum.flatMap((id) {
-      return Stream.fromFuture(Future.delayed(const Duration(seconds: 2)))
+      return Stream.fromFuture(Future.delayed(const Duration(seconds: 1)))
           .flatMap((value) {
-        return albumsRepo.getAlbums().flatMap((AlbumsLocal locals) {
-          Album al = locals.albums.firstWhere((album) => album.id == id);
-          return Stream.value(UIModel.ok(al));
+        return albumsRepo.getAlbumById(id).flatMap((Album album) {
+          return Stream.value(UIModel.ok(album));
         }).onErrorResume((error, stackTrace) {
           return Stream.value(UIModel.error(error));
         });
