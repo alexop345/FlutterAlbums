@@ -1,4 +1,4 @@
-import 'package:albums/models/album_list_data.dart';
+import 'package:albums/screens/album_list/album_list_data.dart';
 import 'package:albums/screens/album_list/album_list_view_model.dart';
 import 'package:albums/themes/app_diments.dart';
 import 'package:albums/widgets/album_list_item_widget.dart';
