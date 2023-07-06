@@ -28,19 +28,20 @@ main() {
       repo: repo,
       currentDate: now,
       durationThresholdInMinutes: thresholdInMinutes,
-      dateHelper: dateHelper,
     );
     when(() => dateHelper.now).thenAnswer((_) => now);
   });
 
   test('albums should have been updated recently', () {
     final localAlbums = AlbumsLocal(
-      updatedDate: dateHelper.now.subtract(Duration(minutes: thresholdInMinutes)),
+      updatedDate:
+          dateHelper.now.subtract(Duration(minutes: thresholdInMinutes)),
       albums: [const Album(userId: 1, id: 1, title: 'Test album')],
     );
 
     when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
-    expect(viewModel.output.albumList, emits(AlbumListData.recent(albums: localAlbums.albums)));
+    expect(viewModel.output.albumList,
+        emits(AlbumListData.recent(albums: localAlbums.albums)));
   });
 
   test('albums should have been updated minutes earlier', () {
@@ -50,7 +51,10 @@ main() {
     );
 
     when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
-    AlbumListData albumListData = AlbumListData.fromDate(albums: localAlbums.albums, oldDate: localAlbums.updatedDate, nowDate: now);
+    AlbumListData albumListData = AlbumListData.fromDate(
+        albums: localAlbums.albums,
+        oldDate: localAlbums.updatedDate,
+        nowDate: now);
     expect(viewModel.output.albumList, emits(albumListData));
     expect(albumListData.lastUpdate!.period, 'm');
   });
@@ -62,7 +66,10 @@ main() {
     );
 
     when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
-    AlbumListData albumListData = AlbumListData.fromDate(albums: localAlbums.albums, oldDate: localAlbums.updatedDate, nowDate: now);
+    AlbumListData albumListData = AlbumListData.fromDate(
+        albums: localAlbums.albums,
+        oldDate: localAlbums.updatedDate,
+        nowDate: now);
     expect(viewModel.output.albumList, emits(albumListData));
     expect(albumListData.lastUpdate!.period, 'h');
   });
