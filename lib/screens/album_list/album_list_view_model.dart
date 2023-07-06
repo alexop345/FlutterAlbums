@@ -16,17 +16,13 @@ class AlbumListViewModel {
     albumsRepo = repo ?? AlbumsRepo();
     thresholdInMinutes = durationThresholdInMinutes ?? 1;
 
-    StreamController<bool> showLoadingController = StreamController();
-
     Stream<AlbumListData> albumList = input.getList.startWith(null).flatMap(
       (_) {
-        showLoadingController.add(true);
         return Stream.fromFuture(Future.delayed(const Duration(seconds: 2)))
             .flatMap((value) {
           DateHelper helper = DateHelper();
           return albumsRepo.getAlbums().map(
             (AlbumsLocal locals) {
-              showLoadingController.add(false);
               return helper.now.difference(locals.updatedDate).inMinutes >
                       thresholdInMinutes
                   ? AlbumListData.fromDate(
@@ -41,11 +37,10 @@ class AlbumListViewModel {
       },
     );
 
-    Stream<bool> showLoading = showLoadingController.stream.map((bool value) {
-      return value;
-    });
+    Stream<bool> showLoading = input.getList.map((event) => true);
+    Stream<bool> hideLoading = albumList.map((event) => false);
 
-    output = Output(albumList, showLoading);
+    output = Output(albumList, MergeStream([showLoading, hideLoading]));
   }
 }
 
