@@ -73,4 +73,11 @@ main() {
     expect(viewModel.output.albumList, emits(albumListData));
     expect(albumListData.lastUpdate!.period, 'h');
   });
+
+  test('reload', () {
+    final localAlbums = AlbumsLocal(updatedDate: dateHelper.now, albums: []);
+    when(() => repo.getAlbums()).thenAnswer((_) => Stream.value(localAlbums));
+    expect(viewModel.output.showLoading, emitsInOrder([true, false]));
+    viewModel.input.getList.add(null);
+  });
 }
