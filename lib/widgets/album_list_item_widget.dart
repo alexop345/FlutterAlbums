@@ -53,7 +53,10 @@ class AlbumListItemWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (ctx) => AlbumDetailsScreen(album),
+                    builder: (ctx) => AlbumDetailsScreen(
+                      album.id,
+                      title: album.title,
+                    ),
                   ),
                 );
               },
