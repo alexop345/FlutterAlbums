@@ -42,6 +42,15 @@ class AlbumsRepo {
     });
   }
 
+  Stream<Album> getAlbumById(int id) {
+    return getAlbums().map((AlbumsLocal albumsLocal) {
+      if (id == 3) {
+        throw Exception('Exception from getAlbumById thrown');
+      }
+      return albumsLocal.albums.firstWhere((album) => album.id == id);
+    });
+  }
+
   Stream<AlbumsLocal> setLocalAlbums(AlbumsLocal albums) {
     return sharedPrefRepo
         .setString(StorageKey.albums, jsonEncode(albums.toJson()))
