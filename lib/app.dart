@@ -5,17 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+class App extends StatelessWidget {
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Albums',
       theme: AppTheme.appTheme,
       localizationsDelegates: const [
         AppLocalizations.delegate,
