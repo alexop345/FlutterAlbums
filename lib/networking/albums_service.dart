@@ -7,7 +7,7 @@ part 'albums_service.g.dart';
 
 @RestApi(baseUrl: '$urlProtocol$urlDomain/')
 abstract class AlbumsService {
-  factory AlbumsService(Dio dio) = _AlbumsService;
+  factory AlbumsService(Dio dio, {required String baseUrl}) = _AlbumsService;
 
   @GET('albums')
   Future<List<Album>> getAlbums();
