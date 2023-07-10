@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   FlavorConfig(
-    flavor: Flavor.dev,
+    flavor: Flavor.stage,
     values: FlavorValues(baseUrl: 'https://jsonplaceholder.typicode.com/'),
   );
   runApp(
