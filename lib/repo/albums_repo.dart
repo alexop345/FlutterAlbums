@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:albums/flavor_config.dart';
 import 'package:albums/helper/date_helper.dart';
 import 'package:albums/models/album.dart';
 import 'package:albums/models/albums_local.dart';
@@ -18,7 +19,8 @@ class AlbumsRepo {
 
   AlbumsRepo({albumsService, sharedPrefRepo, networkConnection, dateHelper})
       : albumsService = albumsService ??
-            AlbumsService(Dio(BaseOptions(contentType: "application/json"))),
+            AlbumsService(Dio(BaseOptions(contentType: "application/json")),
+                baseUrl: FlavorConfig.instance.values.baseUrl),
         sharedPrefRepo = sharedPrefRepo ?? SharedPrefRepo(),
         networkConnection =
             networkConnection ?? const NetworkConnection(url: urlDomain),
